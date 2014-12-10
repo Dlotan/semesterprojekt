@@ -21,6 +21,7 @@ public class MainTest {
 	final int initialClasses = 100000;
 	RandomGenerator generator;
 	DiceMaster diceMaster;
+
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -38,11 +39,11 @@ public class MainTest {
 		generator = new GeneratorCosine(arguments);
 		diceMaster = new DiceMaster(generator, initialClasses, randomNumbers);
 		boolean win = false;
-		for(int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) {
 			List<Double> numbers = diceMaster.getRandomNumbers();
 			assertTrue("Wrong size of numbers", numbers.size() == randomNumbers);
-			if(diceMaster.checkChiSquare(numbers) == true) {
-				if(diceMaster.getRandomRangeClasses(numbers).size() > 100) {
+			if (diceMaster.checkChiSquare(numbers) == true) {
+				if (diceMaster.getRandomRangeClasses(numbers).size() > 100) {
 					win = true;
 					break;
 				}
@@ -50,7 +51,7 @@ public class MainTest {
 		}
 		assertTrue("No win", win);
 	}
-	
+
 	@Test
 	public void testCauchy() {
 		System.out.println("Cauchy");
@@ -60,19 +61,19 @@ public class MainTest {
 		generator = new GeneratorCauchy(arguments);
 		diceMaster = new DiceMaster(generator, initialClasses, randomNumbers);
 		boolean win = false;
-		for(int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) {
 			List<Double> numbers = diceMaster.getRandomNumbers();
 			assertTrue("Wrong size of numbers", numbers.size() == randomNumbers);
-			if(diceMaster.checkChiSquare(numbers) == true) {
-				if(diceMaster.getRandomRangeClasses(numbers).size() > 100) {
+			if (diceMaster.checkChiSquare(numbers) == true) {
+				if (diceMaster.getRandomRangeClasses(numbers).size() > 100) {
 					win = true;
 					break;
 				}
 			}
 		}
-		assertTrue("No win",win);
+		assertTrue("No win", win);
 	}
-	
+
 	@Test
 	public void testErlang() {
 		System.out.println("Erlang");
@@ -82,19 +83,19 @@ public class MainTest {
 		generator = new GeneratorErlang(arguments);
 		diceMaster = new DiceMaster(generator, initialClasses, randomNumbers);
 		boolean win = false;
-		for(int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) {
 			List<Double> numbers = diceMaster.getRandomNumbers();
 			assertTrue("Wrong size of numbers", numbers.size() == randomNumbers);
-			if(diceMaster.checkChiSquare(numbers) == true) {
-				if(diceMaster.getRandomRangeClasses(numbers).size() > 100) {
+			if (diceMaster.checkChiSquare(numbers) == true) {
+				if (diceMaster.getRandomRangeClasses(numbers).size() > 100) {
 					win = true;
 					break;
 				}
 			}
 		}
-		assertTrue("No win",win);
+		assertTrue("No win", win);
 	}
-	
+
 	@Test
 	public void testWeibull() {
 		System.out.println("Weibull");
@@ -105,17 +106,17 @@ public class MainTest {
 		generator = new GeneratorWeibull(arguments);
 		diceMaster = new DiceMaster(generator, initialClasses, randomNumbers);
 		boolean win = false;
-		for(int i = 0; i < 100; i++) {
+		for (int i = 0; i < 100; i++) {
 			List<Double> numbers = diceMaster.getRandomNumbers();
 			assertTrue("Wrong size of numbers", numbers.size() == randomNumbers);
-			if(diceMaster.checkChiSquare(numbers) == true) {
-				if(diceMaster.getRandomRangeClasses(numbers).size() > 100) {
+			if (diceMaster.checkChiSquare(numbers) == true) {
+				if (diceMaster.getRandomRangeClasses(numbers).size() > 100) {
 					win = true;
 					break;
 				}
 			}
 		}
-		assertTrue("No win",win);
+		assertTrue("No win", win);
 	}
 
 }
