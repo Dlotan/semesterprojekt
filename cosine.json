@@ -1,0 +1,15 @@
+{
+  "generator": "cosine",
+  "randomNumbers": "3000",
+  "initialClasses": "300",
+  "arguments": [
+    {
+      "key": "xMin",
+      "value": "0.0"
+    },
+    {
+      "key": "xMax",
+      "value": "1.0"
+    }
+  ]
+}

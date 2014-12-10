@@ -1,0 +1,15 @@
+{
+  "generator": "cauchy",
+  "randomNumbers": "3000",
+  "initialClasses": "100000",
+  "arguments": [
+    {
+      "key": "a",
+      "value": "0.0"
+    },
+    {
+      "key": "b",
+      "value": "0.5"
+    }
+  ]
+}
