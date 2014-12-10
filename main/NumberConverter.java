@@ -11,7 +11,9 @@ public class NumberConverter {
 		Double min = Collections.min(source);
 		Double max = Collections.max(source);
 		// 1) Make min 0 -> min = 5 -> 10 will be 5 
+		// example: [1,2,5,10] -> [0,1,4,9]
 		// 2) Rule of three to make biggest to be 1 billion.
+		// example: [0,1,2,3,4,5] -> [0,200000000,400000000,600000000,800000000,1000000000]
 		max = max - min;
 		double multiplier = 1000000000 / max;
 		for(int i = 0; i < source.size(); i++) {
