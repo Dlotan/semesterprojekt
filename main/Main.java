@@ -39,6 +39,7 @@ public class Main {
 		do {
 			numbers = diceMaster.getRandomNumbers();
 		} while (diceMaster.checkChiSquare(numbers) == false);
+		List<Integer> intNumbers = NumberConverter.convertDoubleList(numbers);
 		System.out.println("---END-WÜRFELN---");
 		double min = Collections.min(numbers);
 		double max = Collections.max(numbers);
@@ -46,9 +47,9 @@ public class Main {
 		System.out.println("Max ist " + max);
 		Database database = new Database(databaseName);
 		database.clear();
-		database.fill(numbers);
+		database.fill(intNumbers);
 		database.createIndex();
-		// database.output();
+		database.output();
 		database.close();
 	}
 }

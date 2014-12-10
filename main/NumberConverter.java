@@ -23,6 +23,7 @@ public class NumberConverter {
 		for(double number : source) {
 			result.add(new Double(number).intValue());
 		}
+		
 		return result;
 	}
 }

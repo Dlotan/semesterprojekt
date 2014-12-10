@@ -17,7 +17,6 @@ public class Database {
 	private String tableName = "T";
 	private String attributeName = "A";
 	private String indexName = "I";
-	private int precission = 6;
 
 	public Database(String databaseName) {
 		try {
@@ -51,8 +50,8 @@ public class Database {
 		}
 	}
 
-	public void fill(List<Double> numbers) {
-		List<List<Double>> subLists = new Vector<List<Double>>();
+	public void fill(List<Integer> numbers) {
+		List<List<Integer>> subLists = new Vector<List<Integer>>();
 		final int partitionSize = 1000;
 		for (int i = 0; i < numbers.size(); i += partitionSize) {
 			subLists.add(numbers.subList(i,
@@ -60,12 +59,11 @@ public class Database {
 		}
 		String startQuery = "insert into " + tableName + "(" + attributeName
 				+ ") Values(";
-		for (List<Double> subList : subLists) {
+		for (List<Integer> subList : subLists) {
 			Vector<String> stringList = new Vector<>();
 			stringList.ensureCapacity(numbers.size());
-			for (double number : subList) {
-				stringList.add(Integer.toString(new Double(number
-						* Math.pow(10, precission)).intValue()));
+			for (Integer number : subList) {
+				stringList.add(Integer.toString(number));
 			}
 			String queries = String.join("),(", stringList);
 			String finalQuery = startQuery + queries + ")";
