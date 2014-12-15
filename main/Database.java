@@ -12,11 +12,11 @@ import java.util.Vector;
 
 public class Database {
 	private String dbURL = null;
-	private Connection conn = null;
+	public Connection conn = null;
 	private Statement stmt = null;
-	private String tableName = "T";
-	private String attributeName = "A";
-	private String indexName = "I";
+	public static final String tableName = "T";
+	public static final String attributeName = "A";
+	public static final String indexName = "I";
 
 	public Database(String databaseName) {
 		try {
@@ -52,7 +52,7 @@ public class Database {
 
 	public void fill(List<Integer> numbers) {
 		List<List<Integer>> subLists = new Vector<List<Integer>>();
-		final int partitionSize = 1000;
+		final int partitionSize = 2000;
 		for (int i = 0; i < numbers.size(); i += partitionSize) {
 			subLists.add(numbers.subList(i,
 					i + Math.min(partitionSize, numbers.size() - i)));

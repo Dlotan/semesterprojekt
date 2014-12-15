@@ -3,6 +3,9 @@ package main;
 import java.util.Collections;
 import java.util.List;
 
+import dbqueries.QueryGenerator;
+import dbqueries.QueryProfiler;
+import dbqueries.RangeQuery;
 import random.GeneratorCauchy;
 import random.GeneratorCosine;
 import random.GeneratorErlang;
@@ -39,17 +42,31 @@ public class Main {
 		do {
 			numbers = diceMaster.getRandomNumbers();
 		} while (diceMaster.checkChiSquare(numbers) == false);
-		List<Integer> intNumbers = NumberConverter.convertDoubleList(numbers);
 		System.out.println("---END-WÜRFELN---");
 		double min = Collections.min(numbers);
 		double max = Collections.max(numbers);
 		System.out.println("Min ist " + min);
 		System.out.println("Max ist " + max);
+		List<Integer> intNumbers = NumberConverter.convertDoubleList(numbers);
+		QueryGenerator queryGenerator = new QueryGenerator(intNumbers);
 		Database database = new Database(databaseName);
 		database.clear();
 		database.fill(intNumbers);
 		database.createIndex();
-		database.output();
+		//List<SingleQuery> singleQueries = queryGenerator.getSingleQueries();
+		List<RangeQuery> rangeQueries = queryGenerator.getRangeQueries();
+		QueryProfiler queryProfiler = new QueryProfiler(database.conn);
+		/*List<Long> results = queryProfiler.profileSingleQueries(singleQueries);
+		for(int i = 0; i < results.size(); i++) {
+			System.out.println(singleQueries.get(i).getQueryString());
+			System.out.println(results.get(i));
+		}*/
+		List<Long> results = queryProfiler.profileRangeQueries(rangeQueries);
+		for(int i = 0; i < results.size(); i++) {
+			System.out.println(rangeQueries.get(i).getQueryString());
+			System.out.println(results.get(i));
+		}
+		//database.output();
 		database.close();
 	}
 }

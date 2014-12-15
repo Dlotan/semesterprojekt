@@ -8,8 +8,8 @@ public class NumberConverter {
 	// Translates a range to range 0 to 1 Billion (Milliarde)
 	// Example range: -1 to 1 -> 0 to 1 Billion
 	static List<Integer> convertDoubleList(List<Double> source) {
-		Double min = Collections.min(source);
-		Double max = Collections.max(source);
+		double min = Collections.min(source);
+		double max = Collections.max(source);
 		// 1) Make min 0 -> min = 5 -> 10 will be 5 
 		// example: [1,2,5,10] -> [0,1,4,9]
 		// 2) Rule of three to make biggest to be 1 billion.

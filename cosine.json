@@ -1,7 +1,7 @@
 {
   "generator": "cosine",
-  "randomNumbers": "3000",
-  "initialClasses": "300",
+  "randomNumbers": "30000",
+  "initialClasses": "2000",
   "arguments": [
     {
       "key": "xMin",

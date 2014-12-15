@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class GeneratorCauchy implements RandomGenerator {
-
 	double a;
 	double b;
 

@@ -9,10 +9,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class JSONRandomGeneratorParser {
-	int numRandomNumbers = 0;
-	int numInitialClasses = 0;
-	String generatorName;
-	Map<String, Double> arguments;
+	private int numRandomNumbers = 0;
+	private int numInitialClasses = 0;
+	private String generatorName;
+	private Map<String, Double> arguments;
 	public JSONRandomGeneratorParser(String path) {
 		arguments = new HashMap<String, Double>();
 		try {
