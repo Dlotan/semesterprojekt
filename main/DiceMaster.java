@@ -92,13 +92,10 @@ public class DiceMaster {
 					/ erwartet;
 		}
 		int j = randomRangeClasses.size();
-		System.out.println("RangeClasses " + j);
 		double z = 1.282;
 		double checksumme = Math.sqrt(2 * (j - 1));
 		checksumme = Math.pow(checksumme + z, 2);
 		checksumme *= 0.5;
-		System.out.println("Chcecksumme " + checksumme);
-		System.out.println("Chi square " + chi_square);
 		return checksumme > chi_square;
 	}
 }

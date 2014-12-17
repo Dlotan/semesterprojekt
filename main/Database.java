@@ -1,12 +1,12 @@
 package main;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -14,9 +14,10 @@ public class Database {
 	private String dbURL = null;
 	public Connection conn = null;
 	private Statement stmt = null;
-	public static final String tableName = "T";
+	public static String databaseName = "D";
+	public static String tableName = "T";
+	public static String indexName = "I";
 	public static final String attributeName = "A";
-	public static final String indexName = "I";
 
 	public Database(String databaseName) {
 		try {
@@ -25,17 +26,8 @@ public class Database {
 			dbURL = "jdbc:derby:" + databaseName
 					+ ";create=true;user=me;password=mine";
 			conn = DriverManager.getConnection(dbURL);
-			// Create Table if not already there.
-			DatabaseMetaData dbm = conn.getMetaData();
-			// check if "tableName" table is there
-			ResultSet tables = dbm.getTables(null, null, tableName, null);
-			if (tables.next() == false) {
-				// Table doesn't exists.
-				executeStatement("CREATE TABLE " + tableName + "("
-						+ attributeName + " int)");
-			}
-		} catch (Exception except) {
-			// except.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -99,9 +91,32 @@ public class Database {
 			sqlExcept.printStackTrace();
 		}
 	}
+	
+	public List<Integer> getNumbers() {
+		List<Integer> result = new ArrayList<>();
+		try {
+			stmt = conn.createStatement();
+			ResultSet results = stmt.executeQuery("select * from " + tableName);
+			while (results.next()) {
+				int num = results.getInt(1);
+				result.add(num);
+			}
+			results.close();
+			stmt.close();
+		} catch (SQLException sqlExcept) {
+			sqlExcept.printStackTrace();
+		}
+		return result;
+	}
 
 	public void clear() {
-		executeStatement("DELETE FROM " + tableName);
+		try{
+			executeStatement("DROP TABLE " + tableName);
+			executeStatement("CREATE TABLE " + tableName + "("
+					+ attributeName + " int)");
+		} catch(Exception e) {
+			
+		}
 	}
 
 	public void close() {
