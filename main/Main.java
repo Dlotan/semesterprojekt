@@ -7,7 +7,6 @@ import java.util.List;
 import dbqueries.QueryGenerator;
 import dbqueries.QueryProfiler;
 import dbqueries.RangeQuery;
-//import dbqueries.RangeQuery;
 import dbqueries.SingleQuery;
 import random.GeneratorCauchy;
 import random.GeneratorCosine;
@@ -29,12 +28,7 @@ public class Main {
 		try {
 			PrintWriter writer = new PrintWriter("output.csv", "UTF-8");
 			CustomJSONParser parser = new CustomJSONParser(args[0]);
-			System.out.println("Test Case Name: " + parser.getName());
-			System.out.println("random numbers: " + parser.getNumRandomNumbers());
-			System.out.println("initial classes: " + parser.getNumInitialClasses());
-			System.out.println("warmup iterations: " + parser.getWarmupIterations());
-			System.out.println("mean iterations: " + parser.getMeanIterations());
-			System.out.println("cycles per generator: " + parser.getCyclesPerGenerator());
+			parser.printStatus();
 			QueryProfiler.warmupIterations = parser.getWarmupIterations();
 			QueryProfiler.meanIterations = parser.getMeanIterations();
 			writer.println("Name;Random Numbers;Initial Classes;Warmup Iterations;Mean Iterations;Cycles per Generator");
@@ -45,7 +39,7 @@ public class Main {
 				+ parser.getMeanIterations() + ";"
 				+ parser.getCyclesPerGenerator() + ";");
 			for(GeneratorJSONParser generatorJSON : parser.getGenerators()) {
-				Database database = new Database(Database.databaseName, generatorJSON.getName());
+				final Database database = new Database(Database.databaseName, generatorJSON.getName());
 				System.out.println("Generator name: " + generatorJSON.getName());
 				System.out.println("Arguments: " + generatorJSON.getArguments().toString());
 				if(parser.isCreate()) {

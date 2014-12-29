@@ -1,5 +1,6 @@
 package dbqueries;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,13 +10,13 @@ import main.Database;
 
 public class QueryGenerator {
 	//private List<Integer> numbers;
-	private Vector<Integer> sortedNumbers;
+	private ArrayList<Integer> sortedNumbers;
 	private final int min; // Should be 0.
 	private final int max; // Should be 1 billion.
 	private final Database database;
 	public QueryGenerator(Database database, List<Integer> integerNumbers) {
 		this.database = database;
-		sortedNumbers = new Vector<Integer>();
+		sortedNumbers = new ArrayList<Integer>();
 		sortedNumbers.ensureCapacity(integerNumbers.size());
 		for(int number : integerNumbers) {
 			sortedNumbers.add(number);

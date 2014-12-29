@@ -67,6 +67,20 @@ public class CustomJSONParser {
 			return;
 		}
 	}
+	
+	public void printStatus() {
+		System.out.println("Test Case Name: " + getName());
+		System.out.println("random numbers: " + getNumRandomNumbers());
+		System.out.println("initial classes: " + getNumInitialClasses());
+		System.out.println("warmup iterations: " + getWarmupIterations());
+		System.out.println("mean iterations: " + getMeanIterations());
+		System.out.println("cycles per generator: " + getCyclesPerGenerator());
+		System.out.println("singleQueries: " + isSingleQueries());
+		System.out.println("rangeQueries: " + isRangeQueries());
+		System.out.println("create: " + isCreate());
+		System.out.println("profile: " + isProfile());
+	}
+	
 	public int getNumRandomNumbers() {
 		return numRandomNumbers;
 	}
