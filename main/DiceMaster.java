@@ -79,23 +79,35 @@ public class DiceMaster {
 	boolean checkChiSquare(List<Double> numbers) {
 		List<RandomRangeClass> randomRangeClasses = getRandomRangeClasses(numbers);
 		if (randomRangeClasses.size() <= 100) {
-			System.out.println("Not enough Classes");
+			System.out.println("Not enough Classes initial");
 			return false;
 		}
 		double chi_square = 0;
+		int notCounted = 0;
 		for (RandomRangeClass randomRangeClass : randomRangeClasses) {
 			double erwartet = generator.getTest(randomRangeClass.getMax())
 					- generator.getTest(randomRangeClass.getMin());
+			if(erwartet <= 0) {
+				notCounted++;
+				continue;
+			}
 			erwartet *= num_randomNumbers;
 			chi_square += Math.pow(randomRangeClass.getValues().size()
 					- erwartet, 2)
 					/ erwartet;
+			//System.out.println("Haben: " + randomRangeClass.getValues().size() + " Erwartet: " + erwartet);
 		}
-		int j = randomRangeClasses.size();
+		int j = randomRangeClasses.size() - notCounted;
+		// Test for Normal distribution not with 100 classes for test
+		if(j <= 50) {
+			System.out.println("Not enough Classes after notCounted");
+			return false;
+		}
 		double z = 1.282;
 		double checksumme = Math.sqrt(2 * (j - 1));
 		checksumme = Math.pow(checksumme + z, 2);
 		checksumme *= 0.5;
+		System.out.println(checksumme + " " + chi_square);
 		return checksumme > chi_square;
 	}
 }

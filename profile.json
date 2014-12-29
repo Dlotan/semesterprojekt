@@ -1,28 +1,15 @@
 {
   "name": "test1"
-  "randomNumbers": "1000000",
-  "initialClasses": "10000",
-  "warmupIterations": "10",
-  "meanIterations": "30",
+  "randomNumbers": "5000",
+  "initialClasses": "400",
+  "warmupIterations": "2",
+  "meanIterations": "10",
   "cyclesPerGenerator": "2",
   "singleQueries": true,
   "rangeQueries": false,
   "create": false,
   "profile": true,
   "generators": [
-    {
-      "name": "cauchy",
-      "arguments": [
-        {
-          "key": "a",
-          "value": "0.0"
-        },
-        {
-          "key": "b",
-          "value": "0.5"
-        }
-      ]
-    },
     {
       "name": "cosine",
       "arguments": [
@@ -63,6 +50,36 @@
         {
           "key": "c",
           "value": "2.0"
+        }
+      ]
+    },
+    {
+      "name": "normal",
+      "arguments": [
+        {
+          "key": "mu",
+          "value": "0.0"
+        },
+        {
+          "key": "sigma",
+          "value": "1.0"
+        }
+      ]
+    },
+    {
+      "name": "lognormal",
+      "arguments": [
+        {
+          "key": "a",
+          "value": "0."
+        },
+        {
+          "key": "mu",
+          "value": "0.0"
+        },
+        {
+          "key": "sigma",
+          "value": "1.0"
         }
       ]
     }

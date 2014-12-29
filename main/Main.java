@@ -11,6 +11,8 @@ import dbqueries.SingleQuery;
 import random.GeneratorCauchy;
 import random.GeneratorCosine;
 import random.GeneratorErlang;
+import random.GeneratorLognormal;
+import random.GeneratorNormal;
 import random.GeneratorWeibull;
 import random.RandomGenerator;
 
@@ -22,6 +24,34 @@ public class Main {
 			sum += number;
 		}
 		return sum / numbers.size();
+	}
+	
+	public static RandomGenerator getGeneratorFromName(GeneratorJSONParser generatorParser) {
+		RandomGenerator generator = null;
+		switch (generatorParser.getName()) {
+		case "cosine":
+			generator = new GeneratorCosine(generatorParser.getArguments());
+			break;
+		case "weibull":
+			generator = new GeneratorWeibull(generatorParser.getArguments());
+			break;
+		case "cauchy":
+			generator = new GeneratorCauchy(generatorParser.getArguments());
+			break;
+		case "erlang":
+			generator = new GeneratorErlang(generatorParser.getArguments());
+			break;
+		case "normal":
+			generator = new GeneratorNormal(generatorParser.getArguments());
+			break;
+		case "lognormal":
+			generator = new GeneratorLognormal(generatorParser.getArguments());
+			break;
+		default:
+			generator = null;
+			break;
+		}
+		return generator;
 	}
 
 	public static void main(String[] args) {
@@ -43,21 +73,7 @@ public class Main {
 				System.out.println("Generator name: " + generatorJSON.getName());
 				System.out.println("Arguments: " + generatorJSON.getArguments().toString());
 				if(parser.isCreate()) {
-					RandomGenerator generator = null;
-					switch (generatorJSON.getName()) {
-					case "cosine":
-						generator = new GeneratorCosine(generatorJSON.getArguments());
-						break;
-					case "weibull":
-						generator = new GeneratorWeibull(generatorJSON.getArguments());
-						break;
-					case "cauchy":
-						generator = new GeneratorCauchy(generatorJSON.getArguments());
-						break;
-					case "erlang":
-						generator = new GeneratorErlang(generatorJSON.getArguments());
-						break;
-					}
+					RandomGenerator generator = getGeneratorFromName(generatorJSON);
 					final DiceMaster diceMaster = new DiceMaster(generator, parser.getNumInitialClasses(),
 							parser.getNumRandomNumbers());
 					System.out.println("---WÜRFELN---");

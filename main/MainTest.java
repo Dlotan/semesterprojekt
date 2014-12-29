@@ -13,12 +13,14 @@ import org.junit.Test;
 import random.GeneratorCauchy;
 import random.GeneratorCosine;
 import random.GeneratorErlang;
+import random.GeneratorLognormal;
+import random.GeneratorNormal;
 import random.GeneratorWeibull;
 import random.RandomGenerator;
 
 public class MainTest {
-	final int randomNumbers = 1000000;
-	final int initialClasses = 10000;
+	final int randomNumbers = 5000;
+	final int initialClasses = 400;
 	RandomGenerator generator;
 	DiceMaster diceMaster;
 
@@ -29,7 +31,6 @@ public class MainTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-
 	@Test
 	public void testCosine() {
 		System.out.println("Cosine");
@@ -39,7 +40,7 @@ public class MainTest {
 		generator = new GeneratorCosine(arguments);
 		diceMaster = new DiceMaster(generator, initialClasses, randomNumbers);
 		boolean win = false;
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 300; i++) {
 			List<Double> numbers = diceMaster.getRandomNumbers();
 			assertTrue("Wrong size of numbers", numbers.size() == randomNumbers);
 			if (diceMaster.checkChiSquare(numbers) == true) {
@@ -67,7 +68,7 @@ public class MainTest {
 		generator = new GeneratorCauchy(arguments);
 		diceMaster = new DiceMaster(generator, initialClasses, randomNumbers);
 		boolean win = false;
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 300; i++) {
 			List<Double> numbers = diceMaster.getRandomNumbers();
 			assertTrue("Wrong size of numbers", numbers.size() == randomNumbers);
 			if (diceMaster.checkChiSquare(numbers) == true) {
@@ -89,7 +90,7 @@ public class MainTest {
 		generator = new GeneratorErlang(arguments);
 		diceMaster = new DiceMaster(generator, initialClasses, randomNumbers);
 		boolean win = false;
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 300; i++) {
 			List<Double> numbers = diceMaster.getRandomNumbers();
 			assertTrue("Wrong size of numbers", numbers.size() == randomNumbers);
 			if (diceMaster.checkChiSquare(numbers) == true) {
@@ -112,7 +113,51 @@ public class MainTest {
 		generator = new GeneratorWeibull(arguments);
 		diceMaster = new DiceMaster(generator, initialClasses, randomNumbers);
 		boolean win = false;
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 300; i++) {
+			List<Double> numbers = diceMaster.getRandomNumbers();
+			assertTrue("Wrong size of numbers", numbers.size() == randomNumbers);
+			if (diceMaster.checkChiSquare(numbers) == true) {
+				if (diceMaster.getRandomRangeClasses(numbers).size() > 100) {
+					win = true;
+					break;
+				}
+			}
+		}
+		assertTrue("No win", win);
+	}
+	@Test
+	public void testNormal() {
+		System.out.println("Normal");
+		Map<String, Double> arguments = new HashMap<>();
+		arguments.put("mu", 0.0);
+		arguments.put("sigma", 1.);
+		generator = new GeneratorNormal(arguments);
+		diceMaster = new DiceMaster(generator, initialClasses, randomNumbers);
+		boolean win = false;
+		for (int i = 0; i < 300; i++) {
+			List<Double> numbers = diceMaster.getRandomNumbers();
+			assertTrue("Wrong size of numbers", numbers.size() == randomNumbers);
+			if (diceMaster.checkChiSquare(numbers) == true) {
+				if (diceMaster.getRandomRangeClasses(numbers).size() > 100) {
+					win = true;
+					break;
+				}
+			}
+		}
+		assertTrue("No win", win);
+	}
+	
+	@Test
+	public void testLogormal() {
+		System.out.println("Lognormal");
+		Map<String, Double> arguments = new HashMap<>();
+		arguments.put("a", 0.);
+		arguments.put("mu", 0.0);
+		arguments.put("sigma", 1.);
+		generator = new GeneratorLognormal(arguments);
+		diceMaster = new DiceMaster(generator, initialClasses, randomNumbers);
+		boolean win = false;
+		for (int i = 0; i < 300; i++) {
 			List<Double> numbers = diceMaster.getRandomNumbers();
 			assertTrue("Wrong size of numbers", numbers.size() == randomNumbers);
 			if (diceMaster.checkChiSquare(numbers) == true) {
