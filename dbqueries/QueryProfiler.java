@@ -8,48 +8,57 @@ import main.Database;
 
 public class QueryProfiler {
 	private Statement stmt = null;
-	final int iterations = 5;
-	final int warmupIterations = 3;
-	public QueryProfiler() {
-		
+	public static int meanIterations = 10;
+	public static int warmupIterations = 10;
+	final Database database;
+	public QueryProfiler(Database database) {
+		this.database = database;
 	}
-	private long profileQuery(Query query) {
+	private double profileQuery(Query query) {
 		String statement = query.getQueryString();
 		long querytime = 0;
 		try{
-			// Warmup
+			if(database.isConnected()) {
+				database.disconnect();
+			}
+			// Warm up
 			for(int i = 0; i < warmupIterations; i++) {
-				Database database = new Database(Database.databaseName);
+				database.connect();
 				stmt = database.conn.createStatement();
 				stmt.executeQuery(statement);
 				stmt.close();
-				database.close();
+				stmt = null;
+				database.disconnect();
 			} 
-			for(int i = 0; i < iterations; i++)
+			// Profile
+			for(int i = 0; i < meanIterations; i++)
 			{
-				Database database = new Database(Database.databaseName);
+				database.connect();
 				stmt = database.conn.createStatement();
-				long before = System.nanoTime();
+				long before = System.currentTimeMillis();
 				stmt.executeQuery(statement);
-				querytime += System.nanoTime() - before;
+				querytime += System.currentTimeMillis() - before;
 				stmt.close();
-				database.close();
+				stmt = null;
+				database.disconnect();
 			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		return querytime / iterations;
+		return querytime / (meanIterations * 1.);
 	}
-	public List<Long> profileSingleQueries(List<SingleQuery> singleQueries) {
-		List<Long> result = new LinkedList<>();
+	public List<Double> profileSingleQueries(List<SingleQuery> singleQueries) {
+		System.gc();
+		List<Double> result = new LinkedList<>();
 		for(Query query : singleQueries) {
 			result.add(profileQuery(query));
 		}
 		return result;
 	}
-	public List<Long> profileRangeQueries(List<RangeQuery> rangeQueries) {
-		List<Long> result = new LinkedList<>();
+	public List<Double> profileRangeQueries(List<RangeQuery> rangeQueries) {
+		System.gc();
+		List<Double> result = new LinkedList<>();
 		for(Query query : rangeQueries) {
 			result.add(profileQuery(query));
 		}

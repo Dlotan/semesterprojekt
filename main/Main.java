@@ -7,6 +7,7 @@ import java.util.List;
 import dbqueries.QueryGenerator;
 import dbqueries.QueryProfiler;
 import dbqueries.RangeQuery;
+//import dbqueries.RangeQuery;
 import dbqueries.SingleQuery;
 import random.GeneratorCauchy;
 import random.GeneratorCosine;
@@ -16,12 +17,12 @@ import random.RandomGenerator;
 
 public class Main {
 	
-	public static double getMean(List<Long> numbers) {
-		long sum = 0;
-		for(long number : numbers) {
+	public static double getMean(List<Double> numbers) {
+		double sum = 0;
+		for(double number : numbers) {
 			sum += number;
 		}
-		return sum / (numbers.size() * 1.0);
+		return sum / numbers.size();
 	}
 
 	public static void main(String[] args) {
@@ -29,17 +30,25 @@ public class Main {
 			PrintWriter writer = new PrintWriter("output.csv", "UTF-8");
 			CustomJSONParser parser = new CustomJSONParser(args[0]);
 			System.out.println("Test Case Name: " + parser.getName());
-			System.out.println("random numbers " + parser.getNumRandomNumbers());
-			System.out.println("initial classes " + parser.getNumInitialClasses());
-			writer.println("Name;Random Numbers;Initial Classes;");
-			writer.println(parser.getName() + ";" + parser.getNumRandomNumbers() + ";" 
-				+ parser.getNumInitialClasses() + ";");
+			System.out.println("random numbers: " + parser.getNumRandomNumbers());
+			System.out.println("initial classes: " + parser.getNumInitialClasses());
+			System.out.println("warmup iterations: " + parser.getWarmupIterations());
+			System.out.println("mean iterations: " + parser.getMeanIterations());
+			System.out.println("cycles per generator: " + parser.getCyclesPerGenerator());
+			QueryProfiler.warmupIterations = parser.getWarmupIterations();
+			QueryProfiler.meanIterations = parser.getMeanIterations();
+			writer.println("Name;Random Numbers;Initial Classes;Warmup Iterations;Mean Iterations;Cycles per Generator");
+			writer.println(parser.getName() + ";"
+				+ parser.getNumRandomNumbers() + ";" 
+				+ parser.getNumInitialClasses() + ";"
+				+ parser.getWarmupIterations() + ";"
+				+ parser.getMeanIterations() + ";"
+				+ parser.getCyclesPerGenerator() + ";");
 			for(GeneratorJSONParser generatorJSON : parser.getGenerators()) {
-				Database.tableName = "T" + generatorJSON.getName();
-				Database.indexName = "I" + generatorJSON.getName();
+				Database database = new Database(Database.databaseName, generatorJSON.getName());
 				System.out.println("Generator name: " + generatorJSON.getName());
 				System.out.println("Arguments: " + generatorJSON.getArguments().toString());
-				if(generatorJSON.isCreate()) {
+				if(parser.isCreate()) {
 					RandomGenerator generator = null;
 					switch (generatorJSON.getName()) {
 					case "cosine":
@@ -74,38 +83,44 @@ public class Main {
 					System.out.println("Min ist " + min);
 					System.out.println("Max ist " + max);
 					List<Integer> intNumbers = NumberConverter.convertDoubleList(numbers);
-					Database database = new Database(Database.databaseName);
+					database.connect();
 					database.clear();
 					database.fill(intNumbers);
 					database.createIndex();
-					database.close();
+					database.disconnect();
 				}
-				if(generatorJSON.isProfile()) {
-					for(int j = 0; j < 3; j++)
+				if(parser.isProfile()) {
+					System.out.println("Read Database");
+					database.connect();
+					QueryGenerator queryGenerator = new QueryGenerator(database, database.getNumbers());
+					for(int j = 0; j < parser.getCyclesPerGenerator(); j++)
 					{
 						System.out.println("Profile");
-						Database database = new Database(Database.databaseName);
-						QueryGenerator queryGenerator = new QueryGenerator(database.getNumbers());
-						database.close();
-						List<SingleQuery> singleQueries = queryGenerator.getSingleQueries();
-						List<RangeQuery> rangeQueries = queryGenerator.getRangeQueries();
-						QueryProfiler queryProfiler = new QueryProfiler();
-						List<Long> results = queryProfiler.profileSingleQueries(singleQueries);
-						writer.print(generatorJSON.getName() + ";SingleQueries;");
-						for(int i = 0; i < results.size(); i++) {
-							writer.print(results.get(i) + ";");
+						QueryProfiler queryProfiler = new QueryProfiler(database);
+						if(parser.isSingleQueries()) {
+							List<SingleQuery> singleQueries = queryGenerator.getSingleQueries();
+							List<Double> results = queryProfiler.profileSingleQueries(singleQueries);
+							writer.print(generatorJSON.getName() + ";SingleQueries;");
+							for(int i = 0; i < results.size(); i++) {
+								writer.print(new Double(results.get(i)).toString().replace(".", ",") + ";");
+							}
+							String mean = new Double(getMean(results)).toString().replace(".", ",");
+							System.out.println("Mean is: " + mean);
+							writer.print(";" + mean + ";");
+							writer.println();
 						}
-						String mean = new Double(getMean(results)).toString().replace(".", ",");
-						System.out.println("Mean is: " + mean);
-						String meanDivided = new Double(getMean(results) / 1000000.).toString().replace(".", ",");
-						writer.print(";" + mean + ";;" + meanDivided + ";");
-						writer.println();
-						/*results = queryProfiler.profileRangeQueries(rangeQueries);
-						writer.print(generatorJSON.getName() + ";RangeQueries;");
-						for(int i = 0; i < results.size(); i++) {
-							writer.print(results.get(i) + ";");
+						if(parser.isRangeQueries()) {
+							List<RangeQuery> rangeQueries = queryGenerator.getRangeQueries();
+							List<Double> results = queryProfiler.profileRangeQueries(rangeQueries);
+							writer.print(generatorJSON.getName() + ";RangeQueries;");
+							for(int i = 0; i < results.size(); i++) {
+								writer.print(new Double(results.get(i)).toString().replace(".", ",") + ";");
+							}
+							String mean = new Double(getMean(results)).toString().replace(".", ",");
+							System.out.println("Mean is: " + mean);
+							writer.print(";" + mean + ";");
+							writer.println();
 						}
-						writer.println();*/
 					}
 				}
 			}

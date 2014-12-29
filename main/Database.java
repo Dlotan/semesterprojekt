@@ -15,23 +15,31 @@ public class Database {
 	public Connection conn = null;
 	private Statement stmt = null;
 	public static String databaseName = "D";
-	public static String tableName = "T";
-	public static String indexName = "I";
 	public static final String attributeName = "A";
-
-	public Database(String databaseName) {
-		try {
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
-			// Get a connection.
-			dbURL = "jdbc:derby:" + databaseName
-					+ ";create=true;user=me;password=mine";
-			conn = DriverManager.getConnection(dbURL);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	private final String tableName;
+	private final String indexName;
+	private boolean connected = false;
+	public Database(String databaseName, String tableName, String indexName) {
+		this.tableName = tableName;
+		this.indexName = indexName;
+	}
+	public Database(String databaseName, String generatorName) {
+		tableName = "T" + generatorName;
+		indexName = "I" + generatorName;
+	}
+	
+	public boolean isConnected() {
+		return connected;
+	}
+	
+	public String getTableName() {
+		return tableName;
 	}
 
-	public void executeStatement(String statement) {
+	public void executeStatement(String statement) throws DatabaseNotConnectedException{
+		if(connected == false) {
+			throw new DatabaseNotConnectedException();
+		}
 		System.out.println("Execute: " + statement);
 		try {
 			stmt = conn.createStatement();
@@ -42,7 +50,10 @@ public class Database {
 		}
 	}
 
-	public void fill(List<Integer> numbers) {
+	public void fill(List<Integer> numbers) throws DatabaseNotConnectedException{
+		if(connected == false) {
+			throw new DatabaseNotConnectedException();
+		}
 		List<List<Integer>> subLists = new Vector<List<Integer>>();
 		final int partitionSize = 2000;
 		for (int i = 0; i < numbers.size(); i += partitionSize) {
@@ -63,12 +74,18 @@ public class Database {
 		}
 	}
 
-	public void createIndex() {
+	public void createIndex() throws DatabaseNotConnectedException{
+		if(connected == false) {
+			throw new DatabaseNotConnectedException();
+		}
 		executeStatement("CREATE INDEX " + indexName + " on " + tableName
 				+ " (" + attributeName + ")");
 	}
 
-	public void output() {
+	public void output() throws DatabaseNotConnectedException{
+		if(connected == false) {
+			throw new DatabaseNotConnectedException();
+		}
 		try {
 			stmt = conn.createStatement();
 			ResultSet results = stmt.executeQuery("select * from " + tableName);
@@ -92,7 +109,10 @@ public class Database {
 		}
 	}
 	
-	public List<Integer> getNumbers() {
+	public List<Integer> getNumbers() throws DatabaseNotConnectedException{
+		if(connected == false) {
+			throw new DatabaseNotConnectedException();
+		}
 		List<Integer> result = new ArrayList<>();
 		try {
 			stmt = conn.createStatement();
@@ -109,7 +129,10 @@ public class Database {
 		return result;
 	}
 
-	public void clear() {
+	public void clear() throws DatabaseNotConnectedException{
+		if(connected == false) {
+			throw new DatabaseNotConnectedException();
+		}
 		try{
 			executeStatement("DROP TABLE " + tableName);
 			executeStatement("CREATE TABLE " + tableName + "("
@@ -118,18 +141,37 @@ public class Database {
 			
 		}
 	}
+	
+	public void connect() {
+		try {
+			Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
+			// Get a connection.
+			dbURL = "jdbc:derby:" + databaseName
+					+ ";create=true;user=me;password=mine";
+			conn = DriverManager.getConnection(dbURL);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		connected = true;
+	}
 
-	public void close() {
+	public void disconnect() throws DatabaseNotConnectedException{
+		if(connected == false) {
+			throw new DatabaseNotConnectedException();
+		}
 		try {
 			if (stmt != null) {
 				stmt.close();
+				stmt = null;
 			}
 			if (conn != null) {
 				DriverManager.getConnection(dbURL + ";shutdown=true");
 				conn.close();
+				conn = null;
 			}
 		} catch (SQLException sqlExcept) {
 
 		}
+		connected = false;
 	}
 }

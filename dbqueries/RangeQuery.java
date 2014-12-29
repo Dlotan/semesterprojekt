@@ -3,11 +3,13 @@ package dbqueries;
 import main.Database;
 
 public class RangeQuery implements Query {
-	final int resultSize;
-	final int lowerBound;
-	final int upperBound;
-	public RangeQuery(int lowerBound, int upperBound, int resultSize) {
+	private final int resultSize;
+	private final int lowerBound;
+	private final int upperBound;
+	private final Database database;
+	public RangeQuery(Database database, int lowerBound, int upperBound, int resultSize) {
 		assert(lowerBound <= upperBound);
+		this.database = database;
 		this.resultSize = resultSize;
 		this.lowerBound = lowerBound;
 		this.upperBound = upperBound;
@@ -15,7 +17,7 @@ public class RangeQuery implements Query {
 
 	@Override
 	public String getQueryString() {
-		return "SELECT * FROM " + Database.tableName + " WHERE a BETWEEN " + lowerBound 
+		return "SELECT * FROM " + database.getTableName() + " WHERE " + Database.attributeName + " BETWEEN " + lowerBound 
 			+ " AND " + upperBound;
 	}
 

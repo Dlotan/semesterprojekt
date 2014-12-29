@@ -1,12 +1,17 @@
 {
   "name": "test1"
-  "randomNumbers": "30000",
+  "randomNumbers": "1000000",
   "initialClasses": "10000",
+  "warmupIterations": "10",
+  "meanIterations": "30",
+  "cyclesPerGenerator": "2",
+  "singleQueries": true,
+  "rangeQueries": false,
+  "create": false,
+  "profile": true,
   "generators": [
     {
       "name": "cauchy",
-      "create": false,
-      "profile": true,
       "arguments": [
         {
           "key": "a",
@@ -20,8 +25,6 @@
     },
     {
       "name": "cosine",
-      "create": false,
-      "profile": true,
       "arguments": [
         {
           "key": "xMin",
@@ -35,8 +38,6 @@
     },
     {
       "name": "erlang",
-      "create": false,
-      "profile": true,
       "arguments": [
         {
           "key": "b",
@@ -50,136 +51,6 @@
     },
     {
       "name": "weibull",
-      "create": false,
-      "profile": true,
-      "arguments": [
-        {
-          "key": "a",
-          "value": "0.0"
-        },
-        {
-          "key": "b",
-          "value": "1.0"
-        },
-        {
-          "key": "c",
-          "value": "2.0"
-        }
-      ]
-    },
-    {
-      "name": "cauchy",
-      "create": false,
-      "profile": true,
-      "arguments": [
-        {
-          "key": "a",
-          "value": "0.0"
-        },
-        {
-          "key": "b",
-          "value": "0.5"
-        }
-      ]
-    },
-    {
-      "name": "cosine",
-      "create": false,
-      "profile": true,
-      "arguments": [
-        {
-          "key": "xMin",
-          "value": "0.0"
-        },
-        {
-          "key": "xMax",
-          "value": "1.0"
-        }
-      ]
-    },
-    {
-      "name": "erlang",
-      "create": false,
-      "profile": true,
-      "arguments": [
-        {
-          "key": "b",
-          "value": "1.0"
-        },
-        {
-          "key": "c",
-          "value": "2.5"
-        }
-      ]
-    },
-    {
-      "name": "weibull",
-      "create": false,
-      "profile": true,
-      "arguments": [
-        {
-          "key": "a",
-          "value": "0.0"
-        },
-        {
-          "key": "b",
-          "value": "1.0"
-        },
-        {
-          "key": "c",
-          "value": "2.0"
-        }
-      ]
-    },
-    {
-      "name": "cauchy",
-      "create": false,
-      "profile": true,
-      "arguments": [
-        {
-          "key": "a",
-          "value": "0.0"
-        },
-        {
-          "key": "b",
-          "value": "0.5"
-        }
-      ]
-    },
-    {
-      "name": "cosine",
-      "create": false,
-      "profile": true,
-      "arguments": [
-        {
-          "key": "xMin",
-          "value": "0.0"
-        },
-        {
-          "key": "xMax",
-          "value": "1.0"
-        }
-      ]
-    },
-    {
-      "name": "erlang",
-      "create": false,
-      "profile": true,
-      "arguments": [
-        {
-          "key": "b",
-          "value": "1.0"
-        },
-        {
-          "key": "c",
-          "value": "2.5"
-        }
-      ]
-    },
-    {
-      "name": "weibull",
-      "create": false,
-      "profile": true,
       "arguments": [
         {
           "key": "a",

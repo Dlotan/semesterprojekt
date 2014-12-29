@@ -5,14 +5,16 @@ import main.Database;
 public class SingleQuery implements Query {
 	private int element;
 	private boolean hit;
-	public SingleQuery(int element, boolean hit) {
+	private final Database database;
+	public SingleQuery(Database database, int element, boolean hit) {
+		this.database = database;
 		this.element = element;
 		this.hit = hit;
 	}
 
 	@Override
 	public String getQueryString() {
-		return "SELECT * FROM " + Database.tableName + " WHERE a = " + element;
+		return "SELECT * FROM " + database.getTableName() + " WHERE " + Database.attributeName + " = " + element;
 	}
 
 	@Override

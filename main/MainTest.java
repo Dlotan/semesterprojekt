@@ -17,8 +17,8 @@ import random.GeneratorWeibull;
 import random.RandomGenerator;
 
 public class MainTest {
-	final int randomNumbers = 3000;
-	final int initialClasses = 100000;
+	final int randomNumbers = 1000000;
+	final int initialClasses = 10000;
 	RandomGenerator generator;
 	DiceMaster diceMaster;
 
@@ -47,6 +47,12 @@ public class MainTest {
 					win = true;
 					break;
 				}
+				else {
+					System.out.println("Not enough final classes");
+				}
+			}
+			else {
+				System.out.println("Chi square not true");
 			}
 		}
 		assertTrue("No win", win);
